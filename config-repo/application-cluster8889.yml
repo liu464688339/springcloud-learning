@@ -1,13 +1,13 @@
-server:
-  port: 8889
+servers:
+  ports: 8889
 
-eureka:
-  instance:
-    hostname: lh # 设置主机名 ,在host文件里配置
-  client:
-    service-url:
-      defaultZone: aaaaaa
+eurekas:
+  instances:
+    hostnames: lh # 设置主机名 ,在host文件里配置
+  clients:
+    service-urls:
+      defaultZones: aaaaaa
 
-spring:
-  application:
-    name: ddddd
+springs:
+  applications:
+    names: ddddd
