@@ -3,11 +3,11 @@ server:
 
 eureka:
   instance:
-    hostname: peer2 # 设置主机名 ,在host文件里配置
+    hostname: lh # 设置主机名 ,在host文件里配置
   client:
     service-url:
-      defaultZone: http://peer1:8888/eureka/
+      defaultZone: aaaaaa
 
 spring:
   application:
-    name: eureka-cluster-server
+    name: ddddd
