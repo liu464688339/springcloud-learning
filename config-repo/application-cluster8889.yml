@@ -3,11 +3,11 @@ servers:
 
 eurekas:
   instances:
-    hostnames: peer2_hahaha # 设置主机名 ,在host文件里配置
+    hostnames: peer2 # 设置主机名 ,在host文件里配置
   clients:
     service-urls:
-      defaultZones: http://peer1:8888/eureka/hahaha
+      defaultZones: http://peer1:8888/eureka/
 
 springs:
   applications:
-    names: eureka-cluster-server_hahaha
+    names: eureka-cluster-server
