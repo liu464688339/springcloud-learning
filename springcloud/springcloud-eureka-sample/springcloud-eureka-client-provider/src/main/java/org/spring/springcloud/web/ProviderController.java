@@ -52,7 +52,7 @@ public class ProviderController {
         //int sleepTime=new Random().nextInt(3000);
         int sleepTime=new Random().nextInt(50000);
         System.out.println("providerForObject sleepTime:"+sleepTime);
-        Thread.sleep(sleepTime);
+        //Thread.sleep(sleepTime);
         return map;
     }
 

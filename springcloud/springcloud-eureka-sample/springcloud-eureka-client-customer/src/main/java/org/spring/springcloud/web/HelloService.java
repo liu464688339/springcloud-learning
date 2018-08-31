@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheKey;
+import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheRemove;
+import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
+import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 
 
 /*hystrix.command.default和hystrix.threadpool.default中的default为默认CommandKey
@@ -110,7 +114,59 @@ public class HelloService {
 		return msg;
 	}
 	
+	/**
+	 * 不加cacheKeyMethod，默认使用全部参数做缓存
+	 * cacheKeyMethod使用cacheKeyMethod值得缓存的key
+	 * cacheKeyMethod指定的key优先级高于@CacheKey
+	 * @param map
+	 * @return
+	 */
+	@CacheResult(cacheKeyMethod = "getCacheKey")
+	@HystrixCommand(fallbackMethod = "CacheHelloFallBack")
+	public String CacheHello1(Map<String,String> map) {
+		System.out.println("---->CacheHello1:"+map.toString());
+		String url = "http://PROVIDER-SERVICE/providerForObject?name= {name}&pwd= {pwd}";
+		Map<String,String> resultMap = restTemplate.getForObject(url, Map.class, map);
+		return "Hello,Customer! msg from providerForObject : <br/><br/> " + resultMap.get("name") + ","
+				+ resultMap.get("pwd");
+	}
+	public String getCacheKey(Map<String,String> map) {
+		System.out.println("---->getCacheKey:"+map.get("name"));
+		return map.get("name");
+	}
 	
+	/**
+	 * 使用name做key
+	 * @param name
+	 * @param pwd
+	 * @return
+	 */
+	public String CacheHello2(@CacheKey String name,String pwd) {
+		System.out.println("---->CacheHello2:"+pwd);
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("name", name);
+		request.put("pwd", pwd);
+		String url = "http://PROVIDER-SERVICE/providerForObject?name= {name}&pwd= {pwd}";
+		Map<String,String> resultMap = restTemplate.getForObject(url, Map.class, request);
+		return "Hello,Customer! msg from providerForObject : <br/><br/> " + resultMap.get("name") + ","
+		+ resultMap.get("pwd");
+	}
 	
-
+	/**
+	 * 指定删除某个方法生成的key
+	 * @param name
+	 * @return
+	 */
+	@CacheRemove(commandKey = "CacheHello2")
+	@HystrixCommand
+	public String RemoveCacheHello2(@CacheKey String name) {
+	    return "return RemoveCacheHello2 Key:Name Success";
+	}
+	
+	public String CacheHelloFallBack(Map<String,String> map){
+		String msg = "CacheHelloService触发Hystrix熔断器，调用降级服务";
+		System.err.println("=========="+msg);
+		return msg;
+	}
+	
 }

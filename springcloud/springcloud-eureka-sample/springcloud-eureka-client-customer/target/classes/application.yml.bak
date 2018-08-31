@@ -11,6 +11,9 @@ eureka:
 spring:
   application:
     name: customer-service # 服务名称
-feign:
-  hystrix:
-    enabled: true
+hystrix:
+  command:
+    default:
+      requestCache:
+        enabled: true
+    
