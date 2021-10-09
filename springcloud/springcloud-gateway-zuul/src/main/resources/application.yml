@@ -12,7 +12,22 @@ eureka:
   instance:
     prefer-ip-address: true
 
+# 具体配置参考
+# https://www.springcloud.cc/spring-cloud-greenwich.html#_router_and_filter_zuul
 zuul:
+  # 忽略所有服务，provider-service和customer-service除外
+  ignoredServices: '*'
+  # ----- start1
+  #routes: 
+    #provider-service: /provider/**  
+    #customer-service: /customer/** 
+  # ----- end1
+
+  # ----- start2
+  # /lh/provider/访问路径的都将指向provider-service服务
   routes: 
-    provider-service: /provider/**  
-    customer-service: /customer/** 
+   provider:   # 该名字随便命名
+     path: /lh/provider/**
+     serviceId: provider-service
+     #url: http://127.0.0.1:8081/provider_service
+  # ----- end2
