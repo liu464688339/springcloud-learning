@@ -15,6 +15,8 @@
 		<!-- Spring Cloud 之 Eureka cluster 集群案例 -->
 		<module>springcloud-eureka-cluster</module>
 		<module>springcloud-config-sample</module>
+		<!-- Spring Cloud 之 Gateway zuul-->
+		<module>springcloud-gateway-zuul</module>
 	</modules>
 
 </project>
